@@ -1,12 +1,11 @@
 import socket
 import hashlib
 import random
-import time
 
 BUFFER_SIZE = 1024
 CHECKSUM_SIZE = 32
 CHUNKNUMBER_SIZE = 6
-LOSS_PROBABILITY = 0.1  #Define probability of loss on a chunK
+LOSS_PROBABILITY = 0.1  #Define probability of loss on a chunk
 
 # Create a UDP socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -19,11 +18,9 @@ client_socket.sendto(request.encode(), ("127.0.0.1", 12345))
 received_chunks = {}
 
 error_flag = False
-# missing_flag = False
 
 def simulate_loss():
     return (random.random() < LOSS_PROBABILITY) 
-
 
 while True:
     data, server_address = client_socket.recvfrom(BUFFER_SIZE + CHECKSUM_SIZE + CHUNKNUMBER_SIZE)
@@ -55,13 +52,11 @@ while True:
         print(f"Checksum mismatch for chunk {chunk_number}. Not sending ACK.")  
         continue
 
-
     received_chunks[chunk_number] = file_data
 
     request = f"ACK {chunk_number}"
     client_socket.sendto(request.encode(), ("127.0.0.1", 12345))
-    
-    
+       
     print(f"Received chunk {chunk_number} successfully.")
 
 # Write the file to disk (reassemble chunks in order)
@@ -72,5 +67,8 @@ if not error_flag:
             file.write(received_chunks[chunk_number])
 
     print(f"File {filename} saved as received_{filename}")
+
+else:
+    print(f"Some error occurred on client's side")
 
 client_socket.close()
