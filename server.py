@@ -40,6 +40,7 @@ while True:
         filename = request[4:]
         print(f"Client requested file: {filename}")
         server_socket.settimeout(0.01) 
+        
         # Check if file exists
         if not os.path.isfile(filename):
             file_error_msg = "ERROR: File not found"
@@ -68,7 +69,7 @@ while True:
                 chunk_number += 1
                 time.sleep(0.0001) #0.1 ms
 
-                # Process ACKs every 10 chunks 
+                # Saves ACKs every 10 chunks 
                 if chunk_number % 10 == 0:
                     get_chunks_ACK()  
 

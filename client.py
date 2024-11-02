@@ -44,10 +44,10 @@ while True:
     checksum_received = data[CHUNKNUMBER_SIZE: CHUNKNUMBER_SIZE + CHECKSUM_SIZE].decode()
     file_data = data[CHUNKNUMBER_SIZE + CHECKSUM_SIZE:]  # The rest should be the actual file data
 
-    # # Simulate Loss
-    # if simulate_loss():
-    #     print(f"Chunk {chunk_number} is lost")
-    #     continue
+    # Simulate Loss
+    if simulate_loss():
+        print(f"Chunk {chunk_number} is lost")
+        continue
 
     # Check if checksums are equal, if not, simply does not ACK
     checksum = hashlib.md5(file_data).hexdigest() # Compute MD5 
